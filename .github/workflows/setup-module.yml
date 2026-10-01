@@ -1,0 +1,121 @@
+name: Setup New Module
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  setup:
+    if: github.run_number == 1 && github.repository != 'majidalfuttaim/dxp-mobile-miniapp'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Extract module name
+        id: config
+        run: |
+          REPO_NAME="${GITHUB_REPOSITORY##*/}"
+          MODULE_NAME="${REPO_NAME#dxp-mobile-}"
+          echo "module=$MODULE_NAME" >> $GITHUB_OUTPUT
+          
+      - name: Create module structure
+        run: |
+          MODULE="${{ steps.config.outputs.module }}"
+          
+          # Create directories
+          mkdir -p "$MODULE/src/commonMain/kotlin/com/maf/$MODULE"
+          mkdir -p "$MODULE/src/androidMain/kotlin/com/maf/$MODULE"
+          mkdir -p "$MODULE/src/iosMain/kotlin/com/maf/$MODULE"
+          mkdir -p "$MODULE/src/commonMain/composeResources/values"
+          
+          # Create .gitignore
+          echo "/build" > "$MODULE/.gitignore"
+          
+          # Create Platform.kt in commonMain
+          cat > "$MODULE/src/commonMain/kotlin/com/maf/$MODULE/Platform.kt" << EOF
+          package com.maf.$MODULE
+
+          interface Platform {
+              val name: String
+          }
+
+          expect fun getPlatform(): Platform
+          EOF
+          
+          # Create Platform.android.kt
+          cat > "$MODULE/src/androidMain/kotlin/com/maf/$MODULE/Platform.android.kt" << EOF
+          package com.maf.$MODULE
+
+          class AndroidPlatform : Platform {
+              override val name: String = "Android \${android.os.Build.VERSION.SDK_INT}"
+          }
+
+          actual fun getPlatform(): Platform = AndroidPlatform()
+          EOF
+          
+          # Create Platform.ios.kt
+          cat > "$MODULE/src/iosMain/kotlin/com/maf/$MODULE/Platform.ios.kt" << EOF
+          package com.maf.$MODULE
+
+          import platform.UIKit.UIDevice
+
+          class IOSPlatform: Platform {
+              override val name: String = UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
+          }
+
+          actual fun getPlatform(): Platform = IOSPlatform()
+          EOF
+          
+          # Create strings.xml in composeResources
+          cat > "$MODULE/src/commonMain/composeResources/values/strings.xml" << EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <string name="app_name">$MODULE</string>
+          </resources>
+          EOF
+          
+      - name: Create build.gradle.kts
+        run: |
+          MODULE="${{ steps.config.outputs.module }}"
+          cp module-template.gradle.kts "$MODULE/build.gradle.kts"
+          sed -i "s/MODULE_PLACEHOLDER/$MODULE/g" "$MODULE/build.gradle.kts"
+          
+      - name: Update root build.gradle.kts
+        run: |
+          MODULE="${{ steps.config.outputs.module }}"
+          sed -i "/commonMain.dependencies {/a\            implementation(project(\":$MODULE\"))" composeApp/build.gradle.kts
+          
+
+      - name: Update settings.gradle.kts
+        run: |
+          MODULE="${{ steps.config.outputs.module }}"
+          echo -e "\ninclude(\":$MODULE\")" >> settings.gradle.kts
+          
+      - name: Cleanup template file
+        run: rm -f module-template.gradle.kts
+
+
+      - name: Apply README template
+        run: |
+          MODULE="${{ steps.config.outputs.module }}"
+          REPO_NAME="${GITHUB_REPOSITORY##*/}"
+          
+          # Copy template to README.md
+          cp README.template.md README.md
+          
+          # Replace placeholders with actual values
+          sed -i "s/{{MODULE_NAME}}/${MODULE}/g" README.md
+          sed -i "s/{{REPO_NAME}}/${REPO_NAME}/g" README.md
+          sed -i "s/{{MODULE_DIR}}/${MODULE}/g" README.md
+          sed -i "s/{{MODULE_DISPLAY_NAME}}/${MODULE}/g" README.md
+          
+
+      - name: Commit and push
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Initialize ${{ steps.config.outputs.module }} module"
+          git push

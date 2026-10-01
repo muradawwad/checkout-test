@@ -1,0 +1,48 @@
+# IDE-specific files
+.idea/
+*.iml
+.DS_STORE
+
+# Build artifacts and temporary files
+build/
+.gradle/
+.kotlin/
+local.properties
+
+# Android-specific build output
+**/build/
+*.apk
+*.aar
+
+# iOS/macOS-specific build output
+.swiftpm/
+.build/
+*.xcodeproj/
+xcuserdata/
+DerivedData/
+
+# Sensitive files (e.g., keystores, environment variables)
+*.jks
+*.keystore
+secrets.properties
+
+
+*.iml
+.kotlin
+.gradle
+**/build/
+xcuserdata
+!src/**/build/
+local.properties
+.idea
+.DS_Store
+captures
+.externalNativeBuild
+.cxx
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
+gradle.properties
