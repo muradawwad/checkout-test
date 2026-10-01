@@ -35,6 +35,7 @@ kotlin {
             implementation(libs.koin.android)
         }
         commonMain.dependencies {
+            implementation(project(":checkout-test"))
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)

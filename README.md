@@ -1,73 +1,80 @@
-# DXP Mobile Mini App Template
+# checkout-test
 
-A **Kotlin Multiplatform (KMP)** template for creating mini-app modules targeting Android and iOS using Compose Multiplatform.
+A Kotlin Multiplatform (KMP) mini-app module for Android and iOS platforms using Compose Multiplatform.
 
-## 🎯 Purpose
+## 📦 Module Information
 
-Use this template to quickly create new mini-app repositories in the DXP Mobile ecosystem with automatic module setup.
+- **Module Name:** `checkout-test`
+- **Repository:** `checkout-test`
+- **Package:** `com.maf.checkout-test`
 
-## 🚀 Quick Start
+## 🏗️ Project Structure
 
-### 1. Create Repository
+```
+checkout-test/
+├── src/
+│   ├── commonMain/
+│   │   ├── kotlin/com/maf/checkout-test/
+│   │   │   └── Platform.kt
+│   │   └── composeResources/values/
+│   │       └── strings.xml
+│   ├── androidMain/
+│   │   └── kotlin/com/maf/checkout-test/
+│   │       └── Platform.android.kt
+│   └── iosMain/
+│       └── kotlin/com/maf/checkout-test/
+│           └── Platform.ios.kt
+└── build.gradle.kts
+```
 
-1. Click **"Use this template"** on GitHub
-2. Name it: `dxp-mobile-<module-name>` (e.g., `dxp-mobile-ecommerce`)
-3. Create the repository
+## 🚀 Getting Started
 
-### 2. Automatic Setup
+### Prerequisites
 
-The CI workflow automatically creates:
-- Complete module structure
-- Platform-specific files (Android/iOS)
-- Build configuration
-- Updated README with your module name
-
-### 3. Configure & Build
-
-Clone and set up credentials in `gradle.properties`:
+Configure your GitHub credentials in `gradle.properties`:
 
 ```properties
 gpr.user=YOUR_GITHUB_USERNAME
 gpr.key=YOUR_GITHUB_PERSONAL_ACCESS_TOKEN
 ```
 
-**⚠️ Never commit credentials to the repository**
+**⚠️ Important:** Never commit credentials. Use environment variables or GitHub Secrets for CI/CD.
 
-## 📛 Naming Convention (Required)
+### Build the Project
 
-Repository name **must** follow: `dxp-mobile-<module-name>`
-
-**Examples:**
-- `dxp-mobile-ecommerce` → Module: `ecommerce`
-- `dxp-mobile-payment` → Module: `payment`
-- `dxp-mobile-loyalty` → Module: `loyalty`
-
-## 📁 Generated Structure
-
-After CI completes:
-
-```
-your-module-name/
-├── src/
-│   ├── commonMain/kotlin/com/maf/your-module/
-│   ├── androidMain/kotlin/com/maf/your-module/
-│   └── iosMain/kotlin/com/maf/your-module/
-└── build.gradle.kts
+```bash
+./gradlew build
 ```
 
-## 📚 Resources
+### Run on Android
 
-- [Kotlin Multiplatform Docs](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
+```bash
+./gradlew :composeApp:installDebug
+```
+
+### Run on iOS
+
+Open `iosApp/iosApp.xcodeproj` in Xcode and run.
+
+## 📚 Included SDKs
+
+This project includes pre-configured SDK modules:
+
+- **Network SDK** - HTTP client, serialization, error handling
+- **SharedUI SDK** - Reusable UI components, themes, and utilities
+
+## 🔧 Development
+
+Start building your mini-app features in:
+- `checkout-test/src/commonMain/` - Shared code
+- `checkout-test/src/androidMain/` - Android-specific code
+- `checkout-test/src/iosMain/` - iOS-specific code
+
+## 📖 Documentation
+
+- [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
 - [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
 
-## 🔧 How It Works
+## 📝 Notes
 
-The CI workflow (`.github/workflows/setup-module.yml`):
-- Runs once on first push
-- Extracts module name from repository name
-- Creates complete KMP module structure
-- Auto-commits the setup
-
----
-
-**Ready to start?** Click "Use this template" and follow the naming convention!
+This module was automatically generated from the `dxp-mobile-miniapp` template repository.

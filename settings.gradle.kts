@@ -42,3 +42,4 @@ dependencyResolutionManagement {
 
 
 include(":composeApp")
+include(":checkout-test")

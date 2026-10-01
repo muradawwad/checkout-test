@@ -10,7 +10,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "com.maf.MODULE_PLACEHOLDER"
+group = "com.maf.checkout-test"
 version = "1.0.0"
 
 val generateVersionFile by tasks.registering {
@@ -23,10 +23,10 @@ val generateVersionFile by tasks.registering {
     outputs.dir(outputDir)
 
     doLast {
-        val file = File(outputDir, "com/maf/MODULE_PLACEHOLDER/BuildConfig.kt")
+        val file = File(outputDir, "com/maf/checkout-test/BuildConfig.kt")
         file.parentFile.mkdirs()
         file.writeText("""
-            package com.maf.MODULE_PLACEHOLDER
+            package com.maf.checkout-test
             
             object BuildConfig {
                 const val VERSION = "$projectVersion"
@@ -40,7 +40,7 @@ val generateVersionFile by tasks.registering {
 
 kotlin {
     androidLibrary {
-        namespace = "com.maf.MODULE_PLACEHOLDER"
+        namespace = "com.maf.checkout-test"
         compileSdk = 36
         minSdk = 24
 
@@ -55,7 +55,7 @@ kotlin {
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
 
-    val xcfName = "MODULE_PLACEHOLDER"
+    val xcfName = "checkout-test"
     val xcf = XCFramework(xcfName)
 
     val iosTargets = listOf(iosX64(), iosArm64(), iosSimulatorArm64())
@@ -135,7 +135,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/majidalfuttaim/dxp-mobile-MODULE_PLACEHOLDER")
+            url = uri("https://maven.pkg.github.com/majidalfuttaim/dxp-mobile-checkout-test")
             credentials {
                 username = providers.gradleProperty("gpr.user").orNull
                     ?: System.getenv("GITHUB_ACTOR")
@@ -150,12 +150,12 @@ tasks.withType<PublishToMavenRepository>().configureEach {
     val pub = publication
     if (pub is MavenPublication) {
         pub.artifactId = when (pub.name) {
-            "kotlinMultiplatform" -> "MODULE_PLACEHOLDER"
-            "android" -> "MODULE_PLACEHOLDER-android"
-            "iosArm64" -> "MODULE_PLACEHOLDER-iosarm64"
-            "iosX64" -> "MODULE_PLACEHOLDER-iosx64"
-            "iosSimulatorArm64" -> "MODULE_PLACEHOLDER-iossimulatorarm64"
-            else -> "MODULE_PLACEHOLDER-${pub.name}"
+            "kotlinMultiplatform" -> "checkout-test"
+            "android" -> "checkout-test-android"
+            "iosArm64" -> "checkout-test-iosarm64"
+            "iosX64" -> "checkout-test-iosx64"
+            "iosSimulatorArm64" -> "checkout-test-iossimulatorarm64"
+            else -> "checkout-test-${pub.name}"
         }
     }
 }
