@@ -1,4 +1,4 @@
-package com.maf.checkout-test
+package com.maf.checkouttest
 
 class AndroidPlatform : Platform {
     override val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"

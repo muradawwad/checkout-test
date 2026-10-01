@@ -26,14 +26,30 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        listOf(
+            "https://maven.pkg.github.com/majidalfuttaim/dxp-mobile-core",
+            "https://maven.pkg.github.com/majidalfuttaim/dxp-mobile-uikit",
+        ).forEach { repoUrl ->
+            maven {
+                url = uri(repoUrl)
+                credentials {
+                    username = providers.gradleProperty("gpr.user").orNull
+                        ?: System.getenv("GITHUB_ACTOR")
+                    password = providers.gradleProperty("gpr.key").orNull
+                        ?: System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
         maven {
-            url = uri("https://maven.pkg.github.com/majidalfuttaim/dxp-mobile-core")
-            url = uri("https://maven.pkg.github.com/majidalfuttaim/dxp-mobile-uikit")
-            credentials {
-                username = providers.gradleProperty("gpr.user").orNull
-                    ?: System.getenv("GITHUB_ACTOR")
-                password = providers.gradleProperty("gpr.key").orNull
-                    ?: System.getenv("GITHUB_TOKEN")
+            url = uri("https://jitpack.io")
+            content {
+                includeGroupAndSubgroups("com.github")
+            }
+        }
+        maven {
+            url = uri("https://maven.fpregistry.io/releases")
+            content {
+                includeGroupAndSubgroups("com.fingerprint")
             }
         }
     }

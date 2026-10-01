@@ -1,4 +1,4 @@
-package com.maf.checkout-test
+package com.maf.checkouttest
 
 interface Platform {
     val name: String

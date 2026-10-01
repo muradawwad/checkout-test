@@ -23,10 +23,10 @@ val generateVersionFile by tasks.registering {
     outputs.dir(outputDir)
 
     doLast {
-        val file = File(outputDir, "com/maf/checkout-test/BuildConfig.kt")
+        val file = File(outputDir, "com/maf/checkouttest/BuildConfig.kt")
         file.parentFile.mkdirs()
         file.writeText("""
-            package com.maf.checkout-test
+            package com.maf.checkouttest
             
             object BuildConfig {
                 const val VERSION = "$projectVersion"
@@ -40,7 +40,7 @@ val generateVersionFile by tasks.registering {
 
 kotlin {
     androidLibrary {
-        namespace = "com.maf.checkout-test"
+        namespace = "com.maf.checkouttest"
         compileSdk = 36
         minSdk = 24
 
@@ -83,8 +83,9 @@ kotlin {
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
 
-                implementation("com.maf.core:networking:+")
-                implementation("com.maf.sharedui:sharedui:+")
+                implementation("com.maf.core:networking:1.1.5-beta")
+                implementation("com.maf.sharedui:sharedui:1.4.67-beta")
+                implementation("com.maf.mafcheckout:mafcheckout:1.0.32-dev")
                 implementation(libs.jetbrains.compose.navigation)
                 implementation(libs.androidx.lifecycle.viewmodel)
 
@@ -157,5 +158,13 @@ tasks.withType<PublishToMavenRepository>().configureEach {
             "iosSimulatorArm64" -> "checkout-test-iossimulatorarm64"
             else -> "checkout-test-${pub.name}"
         }
+    }
+}
+
+// The SDK is compiled against this ShareUI line; a newer major breaks its v2 component symbols.
+configurations.configureEach {
+    resolutionStrategy {
+        force("com.maf.sharedui:sharedui:1.4.67-beta")
+        force("com.maf.core:networking:1.1.5-beta")
     }
 }

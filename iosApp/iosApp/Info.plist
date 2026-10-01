@@ -4,5 +4,7 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>Used to pick a gift recipient from your contacts. Nothing is uploaded.</string>
 </dict>
 </plist>
